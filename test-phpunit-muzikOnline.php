@@ -2,15 +2,34 @@
 
 require_once('phpunit-muzikOnline.php');
 
-class Muzik extends WebTest
-{
-        protected $websiteUrl = 'http://dev.muzik-online.com/tw';
+class Muzik extends WebTest {
+
+    protected $websiteUrl = 'http://dev.muzik-online.com/tw';
 	protected function setUp() {
 		parent::elementSetUp();
         $this->setBrowserUrl($this->websiteUrl);
 	}
 
-	/*public function test11() {
+    public function testexample() {
+
+        $this->url($this->websiteUrl);
+        if($this->getBrowser() == 'firefox'){
+                        $this->waitForElement('byCssSelector', 'header.header', 5);
+                        parent::countMenuList();
+                        echo "a";
+                        parent::menu('login', $this->total['login'], 1);
+                        $this->waitForElement('byCssSelector', 'div.main', 10);
+                        parent::login('f56112000@gmail.com', 'ss07290420');
+                        $this->waitForElement('byCssSelector', 'header.header', 5);
+                        $this->scrollView();
+                        $fp = fopen('/report/homepage.jpg', 'wb');
+                        fwrite($fp, $this->currentScreenshot());
+                        fclose($fp);
+        }
+
+    }
+
+	/*public function testA() {
 
 		$this->url('http://dev.muzik-online.com/tw');
         sleep(1);
@@ -272,7 +291,8 @@ class Muzik extends WebTest
         }
         */
 
-        /*public function testaaaa() {
+        /*
+        public function testaaaa() {
 
                 $this->url($this->websiteUrl);
                 //echo parent::$browsers[0]['browserName']."\n";
@@ -280,9 +300,11 @@ class Muzik extends WebTest
                         echo "aaa";
                 else
                         echo "bbb";
-        }*/
+        }
+        */
 
-      /*  public function testafaf() {
+        /*
+        public function testafaf() {
 
                 $this->url($this->websiteUrl);
 
@@ -307,9 +329,10 @@ class Muzik extends WebTest
                         fclose($fp);
 
                 }
-        }*/
+        }
+        */
 
-/*
+        /*
         public function testLoginAndLogout() {
 
                 parent::url($this->websiteUrl);
@@ -322,7 +345,9 @@ class Muzik extends WebTest
                 parent::waitForElement('byCssSelector', 'header.header', 5);
                 parent::menu('logout', $this->total['logout'], 1);
         }
-*/
+        */
+
+        /*
         public function testResgister() {
 
                 parent::url($this->websiteUrl);
@@ -339,7 +364,7 @@ class Muzik extends WebTest
                 parent::menu('logout', $this->total['logout'], 1);
 
         }
-  
+        */
 
 }       
 

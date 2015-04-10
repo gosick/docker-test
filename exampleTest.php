@@ -17,27 +17,53 @@ class exampleTest extends PHPUnit_Extensions_Selenium2TestCase{
         ),
 	);
 
+    public function aaa(){
+
+    }
 
     public function setHostOfBoot2Docker() {
 
-    	exec("echo $HOST", $host);
-    	$this->setHost($host[0]);
+        global $argv, $argc;
+
+        $this->setHost('localhost');
+
+        $count = 0;
+        foreach ($argv as $value) {
+            $count += 1;
+            if(strcmp($value, "--host_ip_docker") == 0){
+                $this->setHost($argv[$count]);
+                break;
+            }
+        }
+        
+        
     }
 
-    public function setHostOfDockerIO() {
-    	exec("$(ip route | awk '/docker/ { print $NF }')", $host);
-    	$this->setHost($host[0]);	
+    public function setHostOfOther() {
+
+    	global $argv, $argc;
+
+        $this->setHost('localhost');
+
+        $count = 0;
+        foreach ($argv as $value) {
+            $count += 1;
+            if(strcmp($value, "--host_ip_user") == 0){
+                $this->setHost($argv[$count]);
+                break;
+            }
+        }
     }
 
 
     public function setUp() {
 
-    	$this->setHostOfBoot2Docker();
+    	//$this->setHostOfBoot2Docker();
+        $this->setHostOfOther();
     	$this->setBrowserUrl($this->websiteUrl);
     }
-    public function testaa(){
+    public function testexample(){
     	$this->url($this->websiteUrl);
-    	echo "aaa";
     }
 }
 ?>

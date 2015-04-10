@@ -7,7 +7,6 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
     protected $passwordConfirm, $btnSend, $keyword, $searchBtn;
     protected $periodicalTag, $mySelfFlag, $playerFlag, $songRepeat;
     protected $otherSongListAmount, $collectionAmount, $songListAmount;
-    protected $url = 'http://dev.muzik-online.com/tw';
     protected $playerMyList, $playerMyCollection, $playertemporaryList;
     protected $playerMyCollectionContent, $playerMyListContent;
     protected $songListTitle, $songListDescription;
@@ -15,22 +14,21 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
     const CONNECT_TIMEOUT_MS = 500;
 
+/*******************************************************************************
+* $browsers default setting
+*/
     public static $browsers = array(
 
         array('browserName' => 'firefox', 
               'host'=>'localhost', 
               'port'=>4444),
-
-       
     );
-/*
- array('browserName' => 'chrome',
-              'host'=>'localhost',
-              'port'=>4444),
-*/
+
+/*******************************************************************************
+* Setting up elements which used for functions
+*/    
     public function elementSetUp() {
 
-        $this->host = 'http://localhost:4444/wd/hub';
         $this->account = '';
         $this->password = '';
         $this->songListTitle = '';
@@ -54,20 +52,60 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->element = '';
     }
 
-    public function wait($second) { $this->timeouts()->implicitWait($second * 1000); }
+ 
+ 
+/*******************************************************************************
+* Waiting for timeout or you can use waitForElement()
+*/
+    public function wait($second) {
+        $this->timeouts()->implicitWait($second * 1000);
+    }
 
-    public function countFloatMenu(){ return count($this->elements($this->using('xpath')->value('//div[@class="float js-float menu"]/div/div/div/div[2]/ul/li'))); }
+/*******************************************************************************
+* Counting the float menu
+*/
+    public function countFloatMenu(){
+        return count($this->elements($this->using('xpath')->value('//div[@class="float js-float menu"]/div/div/div/div[2]/ul/li')));
+    }
 
-    public function countPlayerMyListLeftColumnContent() { return count($this->elements($this->using('xpath')->value('//div[@class="player jp-player open"]/div[2]/div[1]/div[2]/ul/li'))) - 1; }
+/*******************************************************************************
+* Counting the MyList left column content in the player
+*/
+    public function countPlayerMyListLeftColumnContent() {
+        return count($this->elements($this->using('xpath')->value('//div[@class="player jp-player open"]/div[2]/div[1]/div[2]/ul/li'))) - 1;
+    }
 
-    public function countPlayerMyCollectionLeftColumnContent() { return count($this->elements($this->using('xpath')->value('//div[@class="player jp-player open"]/div[2]/div[1]/div[2]/ul/li'))); }
+/*******************************************************************************
+* Counting the MyCollection left column content in the player
+*/
+    public function countPlayerMyCollectionLeftColumnContent() {
+        return count($this->elements($this->using('xpath')->value('//div[@class="player jp-player open"]/div[2]/div[1]/div[2]/ul/li')));
+    }
 
-    public function countMemberSong() { return count($this->elements($this->using('xpath')->value('//div[@class="compoTable"]/ul/li'))) - 1; }
+/*******************************************************************************
+* Counting the member songs in a song list
+*/
+    public function countMemberSong() {
+        return count($this->elements($this->using('xpath')->value('//div[@class="compoTable"]/ul/li'))) - 1;
+    }
 
-    public function countMemberSongList() { return count($this->elements($this->using('xpath')->value('//div[@class="listenContentInner clearfix"]/div'))); }
+/*******************************************************************************
+* Counting the member song lists
+*/
+    public function countMemberSongList() {
+        return count($this->elements($this->using('xpath')->value('//div[@class="listenContentInner clearfix"]/div')));
+    }
 
-    public function countMemberCollection() { return count($this->elements($this->using('xpath')->value('//div[@class="listen-list listen-subscribe"]/ul/li'))); }
+/*******************************************************************************
+* Counting the member collections of other members
+*/
+    public function countMemberCollection() {
+        return count($this->elements($this->using('xpath')->value('//div[@class="listen-list listen-subscribe"]/ul/li')));
+    }
 
+/*******************************************************************************
+* Counting the menu list at the header of the page
+*/
     public function countMenuList() {
 
         $allMusic = count($this->elements($this->using('xpath')->value('//div[@class="container"]/nav/ul/li[1]/ul/li')));
@@ -93,7 +131,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
     }
 
-    //scroll down 250 pixels for chrome's view
+/*******************************************************************************
+* Scrolling down 250 pixels for chrome's view
+*/
     public function scrollView() {
 
                 $script = 'window.scrollBy(0, 250)';
@@ -106,6 +146,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
     }
 
+/*******************************************************************************
+* Waiting for element for some seconds
+*/
     public function waitForElement($selectBy, $element, $second) {
 
                 $this->element = $element;
@@ -190,6 +233,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 
         }
 
+/*******************************************************************************
+* Menu for entering other pages
+*/
     public function menu($select, $total, $index) {
 
         switch ($select) {
@@ -201,7 +247,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->moveto($this->byCssSelector($allMusic));
                 $url = '//div[@class="container"]/nav/ul/li[1]/ul/li['.$index.']/a';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 $this->refresh();
                 break;
@@ -213,7 +259,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->moveto($this->byCssSelector($article));
                 $url = '//div[@class="container"]/nav/ul/li[2]/ul/li['.$index.']/a';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 $this->refresh();
                 break;
@@ -234,7 +280,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->wait(1);
                 $url = '//div[@class="container"]/nav/ul/li[4]/ul/li['.$index.']/a';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 $this->refresh();
                 break;
@@ -242,12 +288,12 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
             case 'memberCenter':
 
                 $this->assertFalse($index > $total || $index <= 0, "member center element does not exist");
-                $periodical = 'li.js-header-member';
-                $this->moveto($this->byCssSelector($periodical));
+                $memberCenter = 'li.js-header-member';
+                $this->moveto($this->byCssSelector($memberCenter));
                 $this->wait(1);
                 $url = '//div[@class="container"]/nav/ul/li[5]/ul/li['.$index.']/a';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 $this->byXPath($url)->click();
                 $this->refresh();
@@ -259,7 +305,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->cookie()->clear();
                 $url = '//div[@class="container"]/div/div[1]/a[1]';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 break;
 
@@ -268,18 +314,18 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->assertEquals(1, $total, "register element does not exist");
                 $url = '//div[@class="container"]/div/div[1]/a[2]';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 break;
 
             case 'logout':
 
-                $this->assertTrue($this->checkLogin(), "you should log in first");
+                $this->assertTrue($this->checkLogin(), "you should login first");
                 $this->refresh();
                 $this->moveto($this->byClassName('name'));
                 $url = '//div[@class="info js-header-info"]/div/a[3]';
                 if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 3);
+                    $this->waitForElement('byXPath', $url, 5);
                 $this->byXPath($url)->click();
                 break;
             
@@ -293,15 +339,17 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
             case 'memberProfile':
 
-                $this->assertTrue($this->checkLogin(), "you should log in first");
+                $this->assertTrue($this->checkLogin(), "you should login first");
                 $this->byClassName('name')->click();
                 $this->mySelfFlag = true;
                 $this->refresh();
+                $this->wait(1);
+                $this->countMemberSongList();
                 break;
 
             case 'logout':
 
-                $this->assertTrue($this->checkLogin(), "you should log in first");
+                $this->assertTrue($this->checkLogin(), "you should login first");
                 $this->refresh();
                 $this->moveto($this->byClassName('name'));
                 $this->byXPath('//div[@class="info js-header-info"]/div/a[3]')->click();
@@ -309,7 +357,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
             case 'payment':
 
-                $this->assertTrue($this->checkLogin(), "you should log in first");
+                $this->assertTrue($this->checkLogin(), "you should login first");
                 $this->moveto($this->byClassName('name'));
                 $this->byXPath('//div[@class="info js-header-info"]/div/a[2]')->click();
                 $this->refresh();
@@ -320,6 +368,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Searching for composers or songs
+*/
     public function search($string) {
 
         $this->wait(1);
@@ -327,6 +378,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->byCssSelector($this->searchBtn)->click();
     }
 
+/*******************************************************************************
+* Checking login
+*/
     public function checkLogin() {
 
         $flag = false;
@@ -339,6 +393,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         return $flag;
     }
 
+/*******************************************************************************
+* Randomly generating a member account
+*/
     public function memberAccountGenerate() {
 
         $length = 10;
@@ -361,7 +418,10 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         return $account;
         
     }
-    
+
+/*******************************************************************************
+* Randomly generating a member password
+*/   
     public function memberPasswordGenerate() {
 
         $length = 10;
@@ -376,6 +436,10 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         return $password;
     }
 
+/*******************************************************************************
+* Member login
+*/
+
     public function login($account, $password) {
 
         $this->byId($this->accountpath)->value($account);
@@ -388,7 +452,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->cookies = array('name' => $this->cookie()->get('member_i18n'), 'access' => $this->cookie()->get('access_token'));
     }
 
-
+/*******************************************************************************
+* Registering a member
+*/
     public function register($account, $password) {
                 
         $this->byId($this->accountpath)->value($account);
@@ -401,6 +467,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->cookies = array('name' => $this->cookie()->get('member_i18n'), 'access' => '');
     }
 
+/*******************************************************************************
+* Clicking advertisement
+*/
     public function ads() {
 
         $adDivUrl = 'div.float-upgrade.js-float-upgrade.visible';
@@ -422,10 +491,11 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
             $this->frame($adElement);
             $this->byXPath('//div[@class="how-do-you-turn-this-on"]/ul/li[1]/div/div/div[1]/a')->click();
         }
-        $popUp = $this->currentWindow()->close();
-        //$this->closeWindow();
     }
 
+/*******************************************************************************
+* Forget password 
+*/
     public function forgetPassword($account, $password) {
 
         $this->menu('login', $this->total['login'], 1);
@@ -437,6 +507,10 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->byId($this->passwordConfirm)->value($password);
         $this->byClassName($this->btnSend)->click();
     }
+
+/*******************************************************************************
+* Selections in member profile page
+*/
 
     public function memberProfileSelect($select) {
 
@@ -481,19 +555,29 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Filling a song list title and description
+*/
     public function fillSongListTitleAndDescription($title, $description) {
 
         $this->songListTitle = $title;
         $this->songListDescription = $description;
     }
 
+/*******************************************************************************
+* Checking a song list title and description if updated
+*/
     public function checkSongList($inputTitle, $inputDescription, $index) {
 
-        $getSonglistDiv = $this->byXPath('//div[@class="listenContentInner clearfix"]/div['.$index.']/div');
+        $url = '//div[@class="listenContentInner clearfix"]/div['.$index.']/div';
+        $getSonglistDiv = $this->byXPath($url);
         $this->moveto($getSonglistDiv);
+        $this->waitForElement('byXPath', $url, 5);
+        $this->wait(3);
         $this->byXPath('//div[@class="listenContentInner clearfix"]/div['.$index.']/div/div/a[3]')->click();
         $title = $this->byId('playlist_title')->value();
-        $description = $this->byId('summary')->value();
+        $description = $this->byId('summary')->text();
+        $this->byCssSelector('button.button.button-gold')->click();
         if((strcmp($title, $inputTitle) !== 0) && (strcmp($description, $inputDescription) !== 0)){
             return false;
         }
@@ -502,29 +586,31 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Checking a song list while deleting
+*/
     public function checkDeleteSongList($index) {
 
         $index = $index + 1;
-        $getSonglistDiv = $this->byXPath('//div[@class="listenContentInner clearfix"]/div['.$index.']/div');
+        $url = '//div[@class="listenContentInner clearfix"]/div['.$index.']/div';
+        $getSonglistDiv = $this->byXPath($url);
         $this->moveto($getSonglistDiv);
+        $this->waitForElement('byXPath', $url, 5);
+        $this->wait(3);
         $this->byXPath('//div[@class="listenContentInner clearfix"]/div['.$index.']/div/div/a[3]')->click();
         $title = $this->byId('playlist_title')->value();
         $description = $this->byId('summary')->text();
+        $this->byCssSelector('button.button.button-gold')->click();
         return array('title' => $title, 'description' => $description);
     }
 
+/*******************************************************************************
+* Operations of a song list
+*/
     public function memberSongListOperation($select, $index) {
 
         sleep(3);
         $this->songListAmount = $this->countMemberSongList();
-
-        if($this->songListAmount == 0) {
-            $url = '//div[@class="main"]/div[3]/div[2]/div[2]/div[1]/a[1]';
-            sleep(1);
-            $this->byXPath($url)->click();
-            $this->wait(0.5);
-            $this->songListAmount = $this->countMemberSongList();
-        }
 
         switch ($select) {
 
@@ -533,10 +619,12 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 //--add new song list--//
                 $this->assertTrue($this->mySelfFlag, "isn't myself, cannot add new lists");
                 $number = $this->songListAmount + 1;
+                $this->waitForElement('byCssSelector', 'div.btnAdd.add', '5');
                 $this->byCssSelector('div.btnAdd.add')->click();
                 $this->wait(0.5);
                 $this->byId('playlist_title')->value($this->songListTitle);
                 $this->byId('summary')->value($this->songListDescription);
+                $this->wait(1);
                 $this->byCssSelector('button.button.button-gold')->click();
                 $this->songListAmount = $this->songListAmount + 1;
                 $this->assertTrue($this->checkSongList($this->songListTitle, $this->songListDescription, $this->songListAmount), "add unsucessfully");
@@ -611,9 +699,8 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->assertTrue($this->mySelfFlag, "isn't myself , cannot delete song lists");
                 $this->assertNotEquals(0, $this->songListAmount, "song list is null, you cannot delete");
                 $this->assertTrue($index > 0 && $index <= $this->songListAmount && $this->songListAmount > 0 && $this->mySelfFlag == true, "index is less than 0 or myself is false");
-                if(($index + 1) <= $this->songListAmount) {
-                    $data = $this->checkDeleteSongList($index);
-                }
+                
+                $this->scrollView();
                 $this->byCssSelector('div.btnDelete.remove')->click();
                 $this->byXPath('//div[@class="listenContentInner clearfix"]/div['.$index.']/div/a')->click();
                 $this->byCssSelector('button.button.button-gold')->click();
@@ -621,9 +708,6 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $this->songListAmount = $this->countMemberSongList();
                 if($index > $this->songListAmount) {
                     break;
-                }
-                else {
-                    $this->assertTrue($this->checkSongList($data['title'], $data['description'], $index), "delete unsucessfully");
                 }
                 break;
 
@@ -633,6 +717,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Getting the status code
+*/
     public function responseCode($timeout_in_ms, $url) {
 
         $ch = curl_init();
@@ -659,6 +746,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         return $code;
     }
 
+/*******************************************************************************
+* Getting the array of urls which have abnormal status code
+*/
     public function getUrlList($url) {
 
         //get homepage contents
@@ -736,18 +826,26 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         return $recordList;
     }
 
+/*******************************************************************************
+* Do the hover on player
+*/
     public function playerOpen() {
 
-        //sleep(3);
         $this->moveto($this->byCssSelector('div.player.jp-player'));
         $this->byXPath('//div[@class="player jp-player over"]/div[1]/div[1]/a')->click();
     }
 
+/*******************************************************************************
+* Close the player
+*/
     public function playerClose() {
 
         $this->byCssSelector('a.open.icon.jp-open')->click();
     }
 
+/*******************************************************************************
+* Header selections of the player
+*/
     public function playerheaderSelect($select) {
 
         $headerElememts = $this->elements($this->using('css selector')->value('a.item'));
@@ -791,6 +889,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Footer selections of the player
+*/
     public function playerfooterSelect($select) {
 
         $footerLeftElements = $this->elements($this->using('xpath')->value('//div[@class="player jp-player open"]/div[3]/div[1]/ul/li'));
@@ -867,6 +968,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Choosing the language at the bottom of the player, needed to first select language 
+*/
     public function chooseLanguage($select) {
 
         switch ($select) {
@@ -892,6 +996,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Checking a album or a track
+*/
     public function playerCheckAlbum() {
 
         if($this->byCssSelector('a.close.jp-delete')->displayed() == 1) {
@@ -900,12 +1007,18 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Selections of player's MyCollection left content 
+*/
     public function playerLeftContentMyCollectionSongListSelect($parentIndex, $index) {
 
         $this->byXPath('//div[@class="player jp-player open"]/div[2]/div[1]/div[2]/ul/li['.$parentIndex.']/ul/li['.$index.']/div/a')->click();
         $songAmount = count($this->elements($this->using('xpath')->value('//div[@class="player jp-player open"]/div[2]/div[2]/div[2]/div[2]/ul/li')));
     }
 
+/*******************************************************************************
+* Selections of the player's left content
+*/
     public function playerLeftContentSelect($select, $index) {
 
         $this->assertNotEquals($this->playerFlag, 'null', "user does not log in , player flag is null");
@@ -974,6 +1087,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Operations of the player song content
+*/
     public function playerSongContentfunc($select, $index) {
 
         if($this->playerFlag == 'temporaryList') {
@@ -1032,7 +1148,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
-
+/*******************************************************************************
+* Selections in a song list page
+*/
     public function memberSongListSongSelect($selectFunc, $index) {
 
         $number = $index + 1;
@@ -1069,8 +1187,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
             case 'add to list':
 
                 $this->assertTrue($number > 1 && $index <= $amount && $amount > 0, "have no songs or index exceeds the amount");
-                //$this->byXPath('//div[@class="compoTable"]/ul/li['.$number.']/div[4]/a[2]'))->getLocationOnScreenOnceScrolledIntoView();
-                $this->byXPath('//div[@class="compoTable"]/ul/li['.$number.']/div[4]/a[2]')->click();
+                $this->moveto($this->byXPath('//div[@class="compoTable"]/ul/li['.$number.']/div[4]/a[2]'))->click();
                 break;
 
             case 'info':
@@ -1091,6 +1208,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+/*******************************************************************************
+* Selections of adding to a song list
+*/
     public function addToListSelect($listSelect, $index) {
         //three selection : new list, temporary, existed
         switch ($listSelect) {
@@ -1124,6 +1244,9 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }   
     }
 
+/*******************************************************************************
+* Selections in member profile of member collection
+*/
     public function memberCollection($select, $index) {
 
         switch ($select) {
@@ -1147,4 +1270,5 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 }
+
 ?>

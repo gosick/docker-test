@@ -21,7 +21,8 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
         array('browserName' => 'firefox', 
               'host'=>'localhost', 
-              'port'=>4444),
+              'port'=>4444,),
+
     );
 
 /*******************************************************************************

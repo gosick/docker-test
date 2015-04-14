@@ -4,9 +4,11 @@ require_once('phpunit-muzikOnline.php');
 
 class Muzik extends WebTest {
 
-    protected $websiteUrl = 'http://dev.muzik-online.com/tw';
+    protected $websiteUrl = 'http://event.muzik-online.com/piano/';
 	protected function setUp() {
 		parent::elementSetUp();
+        $this->useragent();
+        //$this->setDesiredCapabilities(array('firefox-profile' => $this->useragent()));
         $this->setHostOfOther();
         $this->setBrowserUrl($this->websiteUrl);
 
@@ -49,7 +51,7 @@ class Muzik extends WebTest {
 
 
 /*******************************************************************************
-*
+*等價搜尋
 */
 /*
     public function testSearchMozartDataCorrection() {
@@ -414,6 +416,7 @@ class Muzik extends WebTest {
 
     }
 */
+/*
     public function testSituationJ() {
 
         $this->url($this->websiteUrl);
@@ -494,6 +497,54 @@ class Muzik extends WebTest {
 
 
     }
-}       
+    */
 
+/*******************************************************************************
+* test RWD of browser width and take pictures
+*/
+/*
+    function testRWDOfWidth() {
+
+        $this->url('http://event.muzik-online.com/piano/');
+
+        $this->prepareSession()->currentWindow()->maximize();
+        sleep(5);
+        $fp = fopen('report/rwd1.jpg', 'wb');
+        fwrite($fp, $this->currentScreenshot());
+        fclose($fp);
+        $window = $this->currentWindow();
+        $window->size(array('width' => 300, 'height' => 500));
+        sleep(5);
+        $fp = fopen('report/rwd2.jpg', 'wb');
+        fwrite($fp, $this->currentScreenshot());
+        fclose($fp);
+    }
+*/
+
+
+/*******************************************************************************
+* user-agent settings and test RWD of user-agent of iphone and take pictures
+*/
+
+    public function useragent() {
+        $testString = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_4 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B350 Safari/8536.25";
+        $para = "general.useragent.override";
+
+        shell_exec("mkdir firefox-profile");
+        shell_exec("cd firefox-profile && echo 'user_pref(\"$para\", \"$testString\");' >> prefs.js && zip -r ../firefox-profile *");
+        $data = file_get_contents('firefox-profile.zip');
+        shell_exec("rm -rf firefox-profile && rm firefox-profile.zip");
+        return base64_encode($data);
+
+    }
+    public function testUserAgentIphone() {
+        
+        $this->url('https://instagram.com/p/PYM9zAkpCR/');
+
+        $fp = fopen('report/rwd3.jpg', 'wb');
+        fwrite($fp, $this->currentScreenshot());
+        fclose($fp);
+    }
+      
+}
 ?>

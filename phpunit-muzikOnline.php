@@ -14,16 +14,6 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
     const CONNECT_TIMEOUT_MS = 500;
 
-/*******************************************************************************
-* $browsers default setting
-*/
-    public static $browsers = array(
-
-        array('browserName' => 'firefox', 
-              'host'=>'localhost', 
-              'port'=>4444,),
-
-    );
 
 /*******************************************************************************
 * Setting up elements which used for functions
@@ -268,8 +258,8 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
             case 'concert':
 
                 $this->assertEquals(1, $total, "concert element does not exist");
-                $url = 'li.js-header-concert';
-                $this->byCssSelector($url)->click();
+                $url = '//div[@class="container"]/nav/ul/li[3]/a';
+                $this->byXPath($url)->click();
                 $this->refresh();
                 break;
 
@@ -341,7 +331,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
             case 'memberProfile':
 
                 $this->assertTrue($this->checkLogin(), "you should login first");
-                $this->byClassName('name')->click();
+                $this->byCssSelector('a.name')->click();
                 $this->mySelfFlag = true;
                 $this->refresh();
                 $this->wait(1);
@@ -466,6 +456,16 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->byClassName($this->btnSend)->click();
         $this->wait(1);
         $this->cookies = array('name' => $this->cookie()->get('member_i18n'), 'access' => '');
+    }
+
+    public function checkAdOpen(){
+        $adDivUrl = 'div.float-upgrade.js-float-upgrade.visible';
+        if($this->byCssSelector($adDivUrl)->displayed()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 /*******************************************************************************
@@ -833,6 +833,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
     public function playerOpen() {
 
         $this->moveto($this->byCssSelector('div.player.jp-player'));
+        $this->wait(1);
         $this->byXPath('//div[@class="player jp-player over"]/div[1]/div[1]/a')->click();
     }
 
@@ -1188,7 +1189,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
             case 'add to list':
 
                 $this->assertTrue($number > 1 && $index <= $amount && $amount > 0, "have no songs or index exceeds the amount");
-                $this->moveto($this->byXPath('//div[@class="compoTable"]/ul/li['.$number.']/div[4]/a[2]'))->click();
+                $this->byXPath('//div[@class="compoTable"]/ul/li['.$number.']/div[4]/a[2]')->click();
                 break;
 
             case 'info':

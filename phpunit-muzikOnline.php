@@ -294,19 +294,17 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
                 $this->assertFalse($this->checkLogin(), "have logged in!");
                 $this->cookie()->clear();
-                $url = '//div[@class="container"]/div/div[1]/a[1]';
-                if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 5);
-                $this->byXPath($url)->click();
+                if(!$this->byCssSelector('div.login')->displayed())
+                    $this->waitForElement('byCssSelector', 'div.login', 5);
+                $this->byCssSelector('div.login > a:nth-child(1)')->click();
                 break;
 
             case 'register':
 
                 $this->assertEquals(1, $total, "register element does not exist");
-                $url = '//div[@class="container"]/div/div[1]/a[2]';
-                if(!$this->byXPath($url)->displayed())
-                    $this->waitForElement('byXPath', $url, 5);
-                $this->byXPath($url)->click();
+                if(!$this->byCssSelector('div.login')->displayed())
+                    $this->waitForElement('byCssSelector', 'div.login', 5);
+                $this->byCssSelector('div.login > a:nth-child(2)')->click();
                 break;
 
             case 'logout':
@@ -417,7 +415,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
 
         $length = 10;
         $password = '';
-        $word = 'abcdefghijkmnpqrstuvwxyz!@#$%^&*()-=ABCDEFGHIJKLMNPQRSTUVWXYZ<>;{}[]23456789';
+        $word = 'abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789';
         $len = strlen($word);
 
         for ($index = 0; $index < $length; $index++) {

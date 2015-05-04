@@ -9,15 +9,14 @@ class Muzik extends WebTest {
 /*******************************************************************************
 * $browsers default setting
 */
+
     public static $browsers = array(
 
-        
         array(
             'browserName' => 'firefox',
             'host'=>'localhost',
             'port'=>4444,
         ),
-
         array(
             'browserName' => 'phantomjs', 
             'host'=>'localhost', 
@@ -28,20 +27,20 @@ class Muzik extends WebTest {
             'browserName' => 'chrome',
             'host'=>'localhost',
             'port'=>4444,
-        ),
-
+        ),        
+        
     );
 
-
-    protected $account, $password;
+    public static $vars = array(
+        'account' => '',
+        'password' => '',
+    );
 
 	protected function setUp() {
 
 		parent::elementSetUp();
         $this->setHostAndPortByUser();
         $this->setBrowserUrl($this->websiteUrl);
-        $this->password = parent::memberPasswordGenerate();
-        $this->account = parent::memberAccountGenerate();
 	}
 
     public function setHostAndPortByUser() {
@@ -63,7 +62,6 @@ class Muzik extends WebTest {
 /*******************************************************************************
 *equivalence search testing
 */
-
     public function testSearchMozartDataCorrection() {
 
         $this->url($this->websiteUrl);
@@ -113,28 +111,34 @@ class Muzik extends WebTest {
         }
     }
 
-
 /******************************************************************************
 * for a new generating account, do ads clicking, and then sets the accounts and password to other tests
 */
-
     public function testClickAds(){
 
         $this->url($this->websiteUrl);
         parent::waitForElement('byCssSelector', 'header.header', 10);
+        sleep(2);
         parent::countMenuList();
         parent::menu('register', $this->total['register'], 1);
+        sleep(2);  
         parent::waitForElement('byCssSelector', 'div.primary-content.js-controller-content', 10);
         parent::wait(1);
+        $this->password = parent::memberPasswordGenerate();
+        $this->account = parent::memberAccountGenerate();
+        self::$vars['account'] = $this->account;
+        self::$vars['password'] = $this->password;
         parent::register($this->account, $this->password);
+        sleep(2);   
         parent::ads();
-    }
+        sleep(14);
+        parent::menu('logout', $this->total['logout'], 1);
 
+    }
 
 /*******************************************************************************
 * testing for the first song list establishing and entering the song list 404 error 
 */
-
     public function testFirstSongListEnter() {
 
         $this->url($this->websiteUrl);
@@ -142,10 +146,9 @@ class Muzik extends WebTest {
         parent::waitForElement('byCssSelector', 'header.header', 10);
         parent::countMenuList();
         parent::menu('login', $this->total['login'], 1);
-        $this::refresh();
         parent::waitForElement('byCssSelector', 'div.primary-content.js-controller-content', 10);
         parent::wait(1);
-        parent::login($this->account, $this->password);
+        parent::login(self::$vars['account'], self::$vars['password']);
         parent::wait(1);
         parent::waitForElement('byCssSelector', 'header.header', 10);
         parent::menu('memberProfile', $this->total['memberProfile'], 1);
@@ -159,7 +162,6 @@ class Muzik extends WebTest {
 
     }
 
-
 /*******************************************************************************
 * taking a screenshot of homepage
 */
@@ -169,16 +171,16 @@ class Muzik extends WebTest {
         $this->url($this->websiteUrl);
 
         if($this->getBrowser() == 'phantomjs') {
-            $fp = fopen('report/phantomjs_homepage_width.jpg', 'wb');   
+            $fp = fopen('./report/phantomjs_homepage_width.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'chrome') {
-            $fp = fopen('report/chrome_homepage_width.jpg', 'wb');   
+            $fp = fopen('./report/chrome_homepage_width.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'firefox') {
-            $fp = fopen('report/firefox_homepage_width.jpg', 'wb');   
+            $fp = fopen('./report/firefox_homepage_width.jpg', 'wb');   
         }
         else{
-            $fp = fopen('report/homepage.jpg', 'wb');
+            $fp = fopen('./report/homepage.jpg', 'wb');
         }
         fwrite($fp, $this->currentScreenshot());
         fclose($fp);
@@ -187,7 +189,6 @@ class Muzik extends WebTest {
 /*******************************************************************************
 *
 */
-
     public function testSituationA() {
 
         $this->url($this->websiteUrl);
@@ -220,10 +221,10 @@ class Muzik extends WebTest {
         $url = $this->url();
         array_push($result, parent::getUrlList($url));
         
-        $this->assertNull($result[0][0]['url'], "responseCode contains: 4xx, 5xx");    
+        $this->assertNull($result, "responseCode contains: 4xx, 5xx");    
         
     }
-  
+ 
     public function testSituationB() {
 
         $this->url($this->websiteUrl);
@@ -246,7 +247,7 @@ class Muzik extends WebTest {
         $url = $this->url();
         array_push($result, parent::getUrlList($url));
         
-        $this->assertNull($result[0][0]['url'], "responseCode contains: 4xx, 5xx");    
+        $this->assertNull($result, "responseCode contains: 4xx, 5xx");    
     
     }
 
@@ -308,7 +309,7 @@ class Muzik extends WebTest {
         parent::countMenuList();
         parent::menu('login', $this->total['login'], 1);
         parent::waitForElement('byId', 'account', 10);
-        parent::login($this->account, $this->password);
+        parent::login(self::$vars['account'], self::$vars['password']);
         parent::waitForElement('byCssSelector', 'header.header', 10);
 
         parent::menu('memberProfile', $this->total['memberProfile'], 1);
@@ -335,7 +336,7 @@ class Muzik extends WebTest {
 
         parent::menu('login', $this->total['login'], 1);
         parent::waitForElement('byId', 'account', 10);
-        parent::login($this->account, $this->password);
+        parent::login(self::$vars['account'], self::$vars['password']);
         parent::waitForElement('byCssSelector', 'header.header', 10);
         
         parent::menu('allMusic', $this->total['allMusic'], 1);
@@ -364,7 +365,6 @@ class Muzik extends WebTest {
         sleep(5);//sleep for playing time
     }
 
-
     public function testSituationH() {
 
         $this->url($this->websiteUrl);
@@ -374,7 +374,7 @@ class Muzik extends WebTest {
 
         parent::menu('login', $this->total['login'], 1);
         parent::waitForElement('byId', 'account', 10);
-        parent::login($this->account, $this->password);
+        parent::login(self::$vars['account'], self::$vars['password']);
         parent::waitForElement('byCssSelector', 'header.header', 10);
 
         parent::menu('memberProfile', $this->total['memberProfile'], 1);
@@ -413,7 +413,7 @@ class Muzik extends WebTest {
         parent::countMenuList();
         parent::menu('login', $this->total['login'], 1);
         parent::waitForElement('byId', 'account', 10);
-        parent::login($this->account, $this->password);
+        parent::login(self::$vars['account'], self::$vars['password']);
         parent::waitForElement('byCssSelector', 'header.header', 10);
         
         parent::search('Chopin, Frederic');
@@ -468,7 +468,7 @@ class Muzik extends WebTest {
         parent::menu('login', $this->total['login'], 1);
         parent::waitForElement('byCssSelector', 'div.primary-content.js-controller-content', 5);
         parent::wait(1);
-        parent::login($this->account, $this->password);
+        parent::login(self::$vars['account'], self::$vars['password']);
 
         parent::menu('periodical', $this->total['periodical'], 1);
 
@@ -536,12 +536,11 @@ class Muzik extends WebTest {
 
         }
     }
-    
+   
 
 /*******************************************************************************
 * test RWD of browser width and take pictures
 */
-
     function testRWDOfWidth() {
 
         $this->url('http://event.muzik-online.com/piano/');
@@ -550,16 +549,16 @@ class Muzik extends WebTest {
         sleep(5);
 
         if($this->getBrowser() == 'phantomjs') {
-            $fp = fopen('report/phantomjs_rwd1_width.jpg', 'wb');   
+            $fp = fopen('./report/phantomjs_rwd1_width.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'chrome') {
-            $fp = fopen('report/chrome_rwd1_width.jpg', 'wb');   
+            $fp = fopen('./report/chrome_rwd1_width.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'firefox') {
-            $fp = fopen('report/firefox_rwd1_width.jpg', 'wb');   
+            $fp = fopen('./report/firefox_rwd1_width.jpg', 'wb');   
         }
         else{
-            $fp = fopen('report/rwd1.jpg', 'wb');
+            $fp = fopen('./report/rwd1.jpg', 'wb');
         }
         sleep(5);
         fwrite($fp, $this->currentScreenshot());
@@ -569,35 +568,32 @@ class Muzik extends WebTest {
         $window->size(array('width' => 720, 'height' => 480));
 
         if($this->getBrowser() == 'phantomjs') {
-            $fp = fopen('report/phantomjs_rwd2_width.jpg', 'wb');   
+            $fp = fopen('./report/phantomjs_rwd2_width.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'chrome') {
-            $fp = fopen('report/chrome_rwd2_width.jpg', 'wb');   
+            $fp = fopen('./report/chrome_rwd2_width.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'firefox') {
-            $fp = fopen('report/firefox_rwd2_width.jpg', 'wb');   
+            $fp = fopen('./report/firefox_rwd2_width.jpg', 'wb');   
         }
         else{
-            $fp = fopen('report/rwd2.jpg', 'wb');
+            $fp = fopen('./report/rwd2.jpg', 'wb');
         }
         sleep(5);
         fwrite($fp, $this->currentScreenshot());
         fclose($fp);
     }
 
-
-
 /*******************************************************************************
 * user-agent settings and test RWD of user-agent of iphone and take pictures
 */
-
     public function useragent() {
 
         $testString = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_4 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B350 Safari/8536.25";
         $para = "general.useragent.override";
 
         shell_exec("mkdir firefox-profile");
-        shell_exec("cd firefox-profile && echo 'user_pref(\"$para\", \"$testString\");' >> prefs.js && zip -r ../firefox-profile *");
+        shell_exec("cd ./firefox-profile && echo 'user_pref(\"$para\", \"$testString\");' >> prefs.js && zip -r ../firefox-profile *");
         $data = file_get_contents('firefox-profile.zip');
         shell_exec("rm -rf firefox-profile && rm firefox-profile.zip");
         return base64_encode($data);
@@ -608,22 +604,21 @@ class Muzik extends WebTest {
         $this->useragent();
         $this->url('https://instagram.com/p/PYM9zAkpCR/');
         if($this->getBrowser() == 'chrome') {
-            $fp = fopen('report/chrome_rwd_userAgent_Iphone.jpg', 'wb');
+            $fp = fopen('./report/chrome_rwd_userAgent_Iphone.jpg', 'wb');
         }
         else if($this->getBrowser() == 'firefox') {
-            $fp = fopen('report/firefox_rwd_userAgent_Iphone.jpg', 'wb');   
+            $fp = fopen('./report/firefox_rwd_userAgent_Iphone.jpg', 'wb');   
         }
         else if($this->getBrowser() == 'phantomjs') {
-            $fp = fopen('report/phantomjs_rwd_userAgent_Iphone.jpg', 'wb');   
+            $fp = fopen('./report/phantomjs_rwd_userAgent_Iphone.jpg', 'wb');   
         }
         else {
-            $fp = fopen('report/rwd3.jpg', 'wb');
+            $fp = fopen('./report/rwd3.jpg', 'wb');
         }
         
         fwrite($fp, $this->currentScreenshot());
         fclose($fp);
     }
-
       
 }
 ?>

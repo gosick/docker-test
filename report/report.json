@@ -1,0 +1,197 @@
+{
+    "event": "suiteStart",
+    "suite": "UiTest",
+    "tests": 12
+}{
+    "event": "suiteStart",
+    "suite": "UiTest: phantomjs",
+    "tests": 4
+}{
+    "event": "testStart",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testRegisterAndClickAds"
+}{
+    "event": "test",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testRegisterAndClickAds",
+    "status": "pass",
+    "time": 14.772907018661,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testfirstSongListEnterError"
+}{
+    "event": "test",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testfirstSongListEnterError",
+    "status": "error",
+    "time": 0.05455493927002,
+    "trace": [
+
+    ],
+    "message": "Error forwarding the new session Error forwarding the request 172.17.0.11:8080 failed to respond\norg.openqa.grid.common.exception.GridException",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testRWDofUserAgentIphone"
+}{
+    "event": "test",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testRWDofUserAgentIphone",
+    "status": "error",
+    "time": 60.029811859131,
+    "trace": [
+
+    ],
+    "message": "Skipped Test: The Selenium Server is not active on host 192.168.59.103 at port 4444.",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testRWDofWidth"
+}{
+    "event": "test",
+    "suite": "UiTest: phantomjs",
+    "test": "UiTest::testRWDofWidth",
+    "status": "error",
+    "time": 60.003027915955,
+    "trace": [
+
+    ],
+    "message": "Skipped Test: The Selenium Server is not active on host 192.168.59.103 at port 4444.",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "UiTest: chrome",
+    "tests": 4
+}{
+    "event": "testStart",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testRegisterAndClickAds"
+}{
+    "event": "test",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testRegisterAndClickAds",
+    "status": "pass",
+    "time": 21.473004102707,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testfirstSongListEnterError"
+}{
+    "event": "test",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testfirstSongListEnterError",
+    "status": "pass",
+    "time": 33.877680778503,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testRWDofUserAgentIphone"
+}{
+    "event": "test",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testRWDofUserAgentIphone",
+    "status": "pass",
+    "time": 1.9329330921173,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testRWDofWidth"
+}{
+    "event": "test",
+    "suite": "UiTest: chrome",
+    "test": "UiTest::testRWDofWidth",
+    "status": "pass",
+    "time": 14.506958007812,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "suiteStart",
+    "suite": "UiTest: firefox",
+    "tests": 4
+}{
+    "event": "testStart",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testRegisterAndClickAds"
+}{
+    "event": "test",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testRegisterAndClickAds",
+    "status": "pass",
+    "time": 28.697976112366,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testfirstSongListEnterError"
+}{
+    "event": "test",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testfirstSongListEnterError",
+    "status": "pass",
+    "time": 48.308613061905,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testRWDofUserAgentIphone"
+}{
+    "event": "test",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testRWDofUserAgentIphone",
+    "status": "pass",
+    "time": 3.9221289157867,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testRWDofWidth"
+}{
+    "event": "test",
+    "suite": "UiTest: firefox",
+    "test": "UiTest::testRWDofWidth",
+    "status": "pass",
+    "time": 17.256581068039,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}

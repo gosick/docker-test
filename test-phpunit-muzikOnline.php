@@ -12,11 +12,7 @@ class Muzik extends WebTest {
 
     public static $browsers = array(
 
-        array(
-            'browserName' => 'firefox',
-            'host'=>'localhost',
-            'port'=>4444,
-        ),
+        
         array(
             'browserName' => 'phantomjs', 
             'host'=>'localhost', 
@@ -27,9 +23,16 @@ class Muzik extends WebTest {
             'browserName' => 'chrome',
             'host'=>'localhost',
             'port'=>4444,
-        ),        
+        ), 
+
+        array(
+            'browserName' => 'firefox',
+            'host'=>'localhost',
+            'port'=>4444,
+        ),
         
-    );
+        
+    );       
 
     public static $vars = array(
         'account' => '',

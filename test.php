@@ -8,26 +8,11 @@ class UiTest extends WebTest {
 
 	public static $browsers = array(
 
-        
-        array(
-            'browserName' => 'phantomjs', 
-            'host'=>'localhost', 
-            'port'=>4444,
-        ),
-
         array(
             'browserName' => 'chrome',
             'host'=>'localhost',
             'port'=>4444,
-        ), 
-
-        array(
-            'browserName' => 'firefox',
-            'host'=>'localhost',
-            'port'=>4444,
-        ),
-        
-        
+        )
     );       
 
     public static $vars = array(

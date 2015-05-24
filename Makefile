@@ -1,12 +1,14 @@
 HUB_NAME := selenium-hub
+NODE_CHROME := chrome-node
+NODE_CHROME_DEBUG := chrome-node-debug
 NAME_SELENIUM := selenium
 VERSION := 2.45.0
-GIT_NAME := docker-selenium-phpunit-test
+GIT_NAME := selenium-phpunit-test
 GIT_URL := https://github.com/gosick/$(GIT_NAME).git
 HOST := $(shell ifconfig | grep -A 1 'eth0' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)
 PORT := 4444
 
-install: check_docker_install pull_selenium pull_test_from_git
+install: check_docker_install pull_selenium pull_test_from_git run_node_chrome
 
 check_docker_install:
 ifeq "$(shell uname -s)" "Linux"
@@ -21,42 +23,42 @@ else
 endif
 endif
 
-check_hub_run:
-ifeq "$(shell sudo docker ps | grep $(HUB_NAME))" ""
-	@echo null
-else
-	@echo run
+run_hub:
+ifeq "$(shell sudo docker ps -a | grep $(HUB_NAME))" ""
+	@sudo docker run -d -p $(PORT):$(PORT) --name $(HUB_NAME) $(NAME_SELENIUM)/hub:$(VERSION)
+endif
+ifneq "$(shell sudo docker ps -a | grep $(HUB_NAME) | grep 'Exited')" ""
+	@sudo docker restart $(HUB_NAME)
 endif
 
-check_hub_container_exist:
-ifeq "$(shell sudo docker ps -a | grep $(HUB_NAME))" ""
-	@echo null
-else
-	@echo exist
+run_node_chrome: run_hub
+ifeq "$(shell sudo docker ps -a | grep '$(NODE_CHROME)')" ""
+	@sudo docker run -d --link $(HUB_NAME):hub --name $(NODE_CHROME) $(NAME_SELENIUM)/node-chrome:$(VERSION)
+endif
+ifneq "$(shell sudo docker ps -a | grep '$(NODE_CHROME)' | grep 'Exited')" ""
+	@sudo docker restart $(NODE_CHROME)
+endif
+
+build_test:
+ifeq "$(shell sudo docker images | grep '$(test)')" ""
+	@cd $(GIT_NAME) && sudo docker build -t $(test) .
 endif
 
 pull_test_from_git:
 	@echo pull test from $(GIT_URL)
-	@git clone $(GIT_URL)
+	@-git clone $(GIT_URL)
 
-build_test_image:
-	#first to the source exists
-	#else echo test doesn't exist
-	@cd $(GIT_NAME)/testfile && sudo docker build -t $(test) .
-
-test: build_test_image run_hub run_node_chrome run_test
+test: build_test run_test
 
 run_test:
-	@sudo docker run -d -v /home/testing/docker-test/selenium-phpunit-test:/selenium-phpunit-test -e host=$(HOST) -e port=$(PORT) $(test)
-
-stop_test:
-	@sudo docker stop $(test)
-run_hub:
-	@sudo docker run -d -p $(PORT):$(PORT) --name $(HUB_NAME) $(NAME_SELENIUM)/hub:$(VERSION)
-run_node_chrome:
-	@sudo docker run -d --link $(HUB_NAME):hub $(NAME_SELENIUM)/node-chrome:$(VERSION)
+ifeq "$(shell sudo docker ps -a | grep '$(test)')" ""
+	@sudo docker run -d -v /home/testing/selenium-phpunit-test:/selenium-phpunit-test -e host=$(HOST) -e port=$(PORT) --name $(test) $(test)
+endif
+ifneq "$(shell sudo docker ps -a | grep '$(test)' | grep 'Exited')" ""
+	@sudo docker restart $(test)
+endif
 run_node_chrome_debug:
-	@sudo docker run -d -P --link $(HUB_NAME):hub $(NAME_SELENIUM)/node-chrome-debug:$(VERSION)
+	@-sudo docker run -d -P --link $(HUB_NAME):hub --name $(NODE_CHROME_DEBUG) $(NAME_SELENIUM)/node-chrome-debug:$(VERSION)
 
 pull_selenium: selenium
 

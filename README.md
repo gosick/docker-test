@@ -1,5 +1,16 @@
-#  Files of using selenium and phpunit for website testing
+#  Files of using selenium and phpunit for website testing in docker.io
+ 
+* usage
 
-* See 
+	clone the git
 
-    https://github.com/gosick/docker-selenium-phpunit-test
+	move Makefile to the outer folder
+
+	then 
+
+	make install
+
+	make build test=[testname]
+
+	make test test=[testname]
+    
